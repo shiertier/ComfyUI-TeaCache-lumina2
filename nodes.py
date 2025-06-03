@@ -50,10 +50,12 @@ def teacache_lumina2_forward(
     self,
     hidden_states: torch.Tensor,
     timestep: torch.Tensor,
-    encoder_hidden_states: torch.Tensor,
-    encoder_attention_mask: torch.Tensor,
+    encoder_hidden_states: torch.Tensor = None,
+    encoder_attention_mask: torch.Tensor = None,
+    context: torch.Tensor = None,
     attention_kwargs: Optional[Dict[str, Any]] = None,
     return_dict: bool = True,
+    **kwargs
 ) -> Union[torch.Tensor, Transformer2DModelOutput]:
     """
     TeaCache-enhanced forward pass for Lumina2 transformer models.
@@ -61,6 +63,12 @@ def teacache_lumina2_forward(
     This function replaces the original forward method to enable intelligent caching
     based on timestep embedding analysis.
     """
+
+    # Handle both context and encoder_hidden_states parameters for compatibility
+    if context is not None and encoder_hidden_states is None:
+        encoder_hidden_states = context
+    elif encoder_hidden_states is None and context is None:
+        raise ValueError("Either context or encoder_hidden_states must be provided")
 
     # Handle LoRA scaling
     if attention_kwargs is not None:
