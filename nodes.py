@@ -11,27 +11,22 @@ import torch.nn as nn
 import numpy as np
 from typing import Any, Dict, Optional, Tuple, Union, List
 
-try:
-    from diffusers import (
-        Lumina2Transformer2DModel,
-        Lumina2Pipeline,
-        LuminaText2ImgPipeline,
-    )
-    from diffusers.models import LuminaNextDiT2DModel
-    from diffusers.models.modeling_outputs import Transformer2DModelOutput
-    from diffusers.utils import (
-        USE_PEFT_BACKEND,
-        logging,
-        scale_lora_layers,
-        unscale_lora_layers,
-    )
 
-    DIFFUSERS_AVAILABLE = True
-except ImportError:
-    DIFFUSERS_AVAILABLE = False
-    print("Warning: diffusers not available. " "TeaCache for Lumina requires diffusers>=0.25.0")
+from diffusers import (
+    Lumina2Transformer2DModel,
+    Lumina2Pipeline,
+    LuminaText2ImgPipeline,
+)
+from diffusers.models import LuminaNextDiT2DModel
+from diffusers.models.modeling_outputs import Transformer2DModelOutput
+from diffusers.utils import (
+    USE_PEFT_BACKEND,
+    logging,
+    scale_lora_layers,
+    unscale_lora_layers,
+)
 
-logger = logging.get_logger(__name__) if DIFFUSERS_AVAILABLE else None
+logger = logging.get_logger(__name__)
 
 # TeaCache coefficients optimized for Lumina models
 LUMINA_COEFFICIENTS = [
@@ -66,8 +61,6 @@ def teacache_lumina2_forward(
     This function replaces the original forward method to enable intelligent caching
     based on timestep embedding analysis.
     """
-    if not DIFFUSERS_AVAILABLE:
-        raise ImportError("diffusers>=0.25.0 is required for Lumina2 TeaCache functionality")
 
     # Handle LoRA scaling
     if attention_kwargs is not None:
@@ -229,8 +222,6 @@ def teacache_lumina_next_forward(
     This function replaces the original forward method to enable intelligent caching
     based on timestep embedding analysis.
     """
-    if not DIFFUSERS_AVAILABLE:
-        raise ImportError("diffusers>=0.25.0 is required for LuminaNext TeaCache functionality")
 
     # Process patches and embeddings
     hidden_states, mask, img_size, image_rotary_emb = self.patch_embedder(
@@ -371,8 +362,6 @@ class TeaCacheForLumina2:
         num_inference_steps: int,
     ):
         """Apply TeaCache optimization to Lumina2 model."""
-        if not DIFFUSERS_AVAILABLE:
-            raise ImportError("diffusers>=0.25.0 is required for Lumina TeaCache functionality")
 
         model_copy = model.clone()
         transformer = getattr(model_copy.model, "diffusion_model", None)
@@ -452,8 +441,6 @@ class TeaCacheForLuminaNext:
         num_inference_steps: int,
     ):
         """Apply TeaCache optimization to LuminaNext model."""
-        if not DIFFUSERS_AVAILABLE:
-            raise ImportError("diffusers>=0.25.0 is required for Lumina TeaCache functionality")
 
         model_copy = model.clone()
         transformer = getattr(model_copy.model, "diffusion_model", None)
@@ -536,8 +523,6 @@ class TeaCacheForLuminaAuto:
         num_inference_steps: int,
     ):
         """Automatically detect Lumina model type and apply appropriate TeaCache."""
-        if not DIFFUSERS_AVAILABLE:
-            raise ImportError("diffusers>=0.25.0 is required for Lumina TeaCache functionality")
 
         model_copy = model.clone()
         transformer = getattr(model_copy.model, "diffusion_model", None)
