@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "comfyui-teacache-lumina"
+version = "1.0.0"
+description = "ComfyUI节点实现：专为Lumina模型设计的TeaCache加速"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "ComfyUI-TeaCache-Lumina Contributors"}
+]
+license = {text = "Apache-2.0"}
+keywords = ["comfyui", "teacache", "lumina", "diffusion", "acceleration"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Multimedia :: Graphics :: 3D Modeling",
+]
+dependencies = [
+    "torch>=2.0.0",
+    "diffusers>=0.25.0",
+    "numpy>=1.21.0",
+    "transformers>=4.21.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-username/ComfyUI-TeaCache-lumina"
+Repository = "https://github.com/your-username/ComfyUI-TeaCache-lumina.git"
+Documentation = "https://github.com/your-username/ComfyUI-TeaCache-lumina/blob/main/README.md"
+"Bug Reports" = "https://github.com/your-username/ComfyUI-TeaCache-lumina/issues"
+
+[tool.setuptools.packages.find]
+include = ["*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.py", "*.md", "*.txt", "*.toml"]
